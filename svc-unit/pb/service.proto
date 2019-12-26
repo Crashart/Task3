@@ -1,0 +1,79 @@
+syntax = "proto3";
+
+package unit;
+
+import "google/api/annotations.proto";
+
+message Unit {
+    int64 id = 1;
+    string name = 2;
+}
+
+message GetUnitsRequest {}
+
+message GetUnitsResponse {
+    repeated Unit units = 1;
+}
+
+message GetOneUnitRequest {
+    int64 id = 1;
+}
+
+message GetOneUnitResponse {
+    Unit unit = 1;
+}
+
+message CreateUnitRequest {
+    Unit unit = 1;
+}
+
+message CreateUnitResponse {
+    Unit unit = 1;
+}
+
+message UpdateUnitRequest {
+    int64 id = 1;
+    Unit unit = 2;
+}
+
+message UpdateUnitResponse {
+    Unit unit = 1;
+}
+
+message DeleteUnitRequest {
+    int64 id = 1;
+}
+
+message DeleteUnitResponse {}
+
+service UnitService {
+    rpc List(GetUnitsRequest) returns (GetUnitsResponse){
+        option (google.api.http) = {
+        get: "/units"
+        };
+    }
+    rpc Read(GetOneUnitRequest) returns (GetOneUnitResponse){
+        option (google.api.http) = {
+      get: "/unit/{id}"
+    };
+    }
+    rpc Create(CreateUnitRequest) returns (CreateUnitResponse){
+        option (google.api.http) = {
+      post: "/unit"
+      body: "unit"
+    };
+    }
+    rpc Update(UpdateUnitRequest) returns (UpdateUnitResponse){
+        option (google.api.http) = {
+      put: "/unit/{id}"
+      body: "unit"
+    };
+    }
+    rpc Delete(DeleteUnitRequest) returns (DeleteUnitResponse){
+        option (google.api.http) = {
+       delete: "/unit/{id}"
+        };
+    }
+}
+
+//protoc --proto_path=svc-unit/pb --grpc-gateway_out=logtostderr=true:svc-unit/pb --proto_path=google_api --go_out=plugins=grpc:svc-unit/pb service.proto

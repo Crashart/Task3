@@ -1,0 +1,87 @@
+syntax = "proto3";
+
+package employee;
+
+import "google/api/annotations.proto";
+
+message Employee {
+    int64 id = 1;
+    string name = 2;
+    int64 age = 3;
+    int64 unit_id = 4;
+}
+
+message GetEmployeesRequest {
+    int64 id = 1;
+}
+
+message GetEmployeesResponse {
+    repeated Employee emp = 1;
+}
+
+message GetOneEmployeeRequest {
+    int64 id = 1;
+    int64 id1 = 2;
+}
+
+message GetOneEmployeeResponse {
+    Employee emp = 1;
+}
+
+message CreateEmployeeRequest {
+    int64 id = 1;
+    Employee emp = 2;
+}
+
+message CreateEmployeeResponse {
+    Employee emp = 1;
+}
+
+message UpdateEmployeeRequest {
+    int64 id = 1;
+    int64 id1 = 2;
+    Employee emp = 3;
+}
+
+message UpdateEmployeeResponse {
+    Employee emp = 1;
+}
+
+message DeleteEmployeeRequest {
+    int64 id = 1;
+    int64 id1 = 2;
+}
+
+message DeleteEmployeeResponse {}
+
+service EmployeeService {
+    rpc List(GetEmployeesRequest) returns (GetEmployeesResponse){
+        option (google.api.http) = {
+        get: "/unit/{id}/employees"
+        };
+    }
+    rpc Read(GetOneEmployeeRequest) returns (GetOneEmployeeResponse){
+        option (google.api.http) = {
+      get: "/unit/{id}/employee/{id1}"
+    };
+    }
+    rpc Create(CreateEmployeeRequest) returns (CreateEmployeeResponse){
+        option (google.api.http) = {
+      post: "/unit/{id}/employee"
+      body: "emp"
+    };
+    }
+    rpc Update(UpdateEmployeeRequest) returns (UpdateEmployeeResponse){
+        option (google.api.http) = {
+      put: "/unit/{id}/employee/{id1}"
+      body: "emp"
+    };
+    }
+    rpc Delete(DeleteEmployeeRequest) returns (DeleteEmployeeResponse){
+        option (google.api.http) = {
+       delete: "/unit/{id}/employee/{id1}"
+        };
+    }
+}
+
+//protoc --proto_path=svc-employee/pb --grpc-gateway_out=logtostderr=true:svc-employee/pb --proto_path=google_api --go_out=plugins=grpc:svc-employee/pb service.proto
